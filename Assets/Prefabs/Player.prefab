@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 49170644764004912}
   - component: {fileID: 7086601001281680927}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Weapons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 2032838844530392424}
   - component: {fileID: 2032838844530392425}
   - component: {fileID: 2032838844530392430}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2032838844857630880}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2032838845380005063}
   - component: {fileID: 2032838845380005062}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2032838846101600991}
   - component: {fileID: 2032838846101600990}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Isometric Diamond
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -369,7 +369,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3744558497939206578}
   - component: {fileID: 5245326290931763622}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -415,7 +415,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6779277987451531818}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Spawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
