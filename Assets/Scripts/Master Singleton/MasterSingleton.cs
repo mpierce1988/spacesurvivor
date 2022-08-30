@@ -6,9 +6,13 @@ public class MasterSingleton : MonoBehaviour
 {
     public static MasterSingleton instance;
 
-    public SceneLoader SceneLoader => _sceneLoader;
-
     private SceneLoader _sceneLoader;
+    private InputController _inputController;
+
+    public SceneLoader SceneLoader => _sceneLoader;
+    public InputController InputController { get { return _inputController; } }
+
+    
 
     private void Awake()
     {
