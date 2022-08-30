@@ -15,8 +15,7 @@ public class InputController : MonoBehaviour
 
     public void ReceiveMovementFromUnityInputSystem(CallbackContext context)
     {
-        _movementDirection = context.ReadValue<Vector2>();
-        Debug.Log("Vector is: " + _movementDirection);
+        _movementDirection = context.ReadValue<Vector2>();        
     }
 
     public void ReceiveMenuButtonPressFromUnityInputSystem(CallbackContext context)
