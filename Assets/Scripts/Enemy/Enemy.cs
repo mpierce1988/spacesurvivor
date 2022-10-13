@@ -33,6 +33,11 @@ public class Enemy : MonoBehaviour
         _tickCoroutine = StartCoroutine(TickCoroutine());
     }
 
+    public void Kill()
+    {
+        Destroy(this.gameObject);    
+    }
+
     public void SwitchToState(EnemyState enemyState)
     {
         if(_currentState != null)
@@ -68,7 +73,7 @@ public class EnemyIdleState : EnemyState
 {
     public override IEnumerator EnterState(Enemy enemy)
     {
-        Debug.Log("Enemy entered Idle State...");
+        
         // stop ship
         enemy.Rigidbody2D.velocity = Vector2.zero;
         yield return null;
@@ -77,7 +82,7 @@ public class EnemyIdleState : EnemyState
     public override IEnumerator ExitState(Enemy enemy)
     {
         // do nothing
-        Debug.Log("Enemy exited Idle State...");
+        
         yield return null;
         
     }
@@ -102,23 +107,23 @@ public class EnemyChasingState : EnemyState
 {
     public override IEnumerator EnterState(Enemy enemy)
     {
-        Debug.Log("Enemy entered Chase State...");
+        
         yield return null;
     }
 
     public override IEnumerator ExitState(Enemy enemy)
     {
-        Debug.Log("Enemy exited Chase State...");
+        
         yield return null;
     }
 
     public override void Tick(Enemy enemy)
     {
-        Debug.Log("Enemy Chase Tick...");
+        
         // if player is outside of chase range, stop chasing
         if (!IsPlayerWithinChaseDistance(enemy))
         {
-            Debug.Log("Enemy is NOT within chase distance");   
+            
             // switch to idle state
             enemy.SwitchToState(new EnemyIdleState());
             return;
@@ -153,7 +158,7 @@ public class EnemyAttackingState : EnemyState
 {
     public override IEnumerator EnterState(Enemy enemy)
     {
-        Debug.Log("Enemy entered Attacking State...");
+        
         // stop ship
         enemy.Rigidbody2D.velocity = Vector2.zero;
         yield return null;
@@ -161,7 +166,7 @@ public class EnemyAttackingState : EnemyState
 
     public override IEnumerator ExitState(Enemy enemy)
     {
-        Debug.Log("Enemy exited Attacking State...");
+        
         yield return null;
     }
 
@@ -174,7 +179,7 @@ public class EnemyAttackingState : EnemyState
         }
         else
         {
-            Debug.Log("Enemy is attacking...");
+            
         }
         
     }
