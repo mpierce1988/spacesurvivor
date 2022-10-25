@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
+[RequireComponent(typeof(GameObjectPool))]
 public class Weapon : MonoBehaviour
 {
 
@@ -14,53 +15,23 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     protected float fireSpeed;
 
-    public GameObjectPool projectilePool;
+    protected GameObjectPool projectilePool;
 
 
     [SerializeField]
     protected Transform spawnPoint;
 
     protected Coroutine firingCoroutine;
-    protected bool isFiring;
-
-    //protected ObjectPool<GameObject> _pool;
+    protected bool isFiring;    
 
     public GameObject ProjectilePrefab { get => projectilePrefab; set { projectilePrefab = value; } }
     public float FireSpeed { get => fireSpeed; set { fireSpeed = value; } }
     public bool IsFiring { get => isFiring; set { isFiring = value; } }
     public Transform SpawnPoint { get => spawnPoint; set { spawnPoint = value; } }
 
-    private void Start()
+    private void Awake()
     {
-        // create pool of projectiles
-        /*_pool = new ObjectPool<GameObject>(
-            () =>
-            {
-                // instantiate prefab
-                GameObject prefab = Instantiate(projectilePrefab);
-                // assign return to pool function to projectile class
-                prefab.GetComponent<iPoolable>().SetReturnToPoolAction(ReturnToPool);
-                // set parent transform
-                prefab.transform.parent = projectileHierarchyParent;
-                // return gameobject to pool
-                return prefab;
-            },
-            (gameObject) =>
-            {
-                gameObject.transform.position = spawnPoint.position;
-                gameObject.transform.rotation = spawnPoint.rotation;
-                gameObject.SetActive(true);
-            },
-            (gameObject) =>
-            {
-                gameObject.transform.position = Vector3.zero;
-                gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
-                gameObject.SetActive(false);
-            },
-            (gameObject) =>
-            {
-                Destroy(gameObject.gameObject);
-            }, false, 20, 80);*/
+        projectilePool = GetComponent<GameObjectPool>();
     }
 
     public void StartFiring() {
@@ -86,11 +57,6 @@ public class Weapon : MonoBehaviour
 
         firingCoroutine = null;
     }
-
-    /*private void ReturnToPool(GameObject item)
-    {
-        _pool.Release(item);
-    }*/
 
     private void FireFromSpawnPoint(Transform spawnPoint)
     {
