@@ -8,16 +8,20 @@ using UnityEngine.Pool;
 public class Projectile : MonoBehaviour
 {
     [SerializeField]
-    private float _force;
+    private float force;
     [SerializeField]
-    private float _returnToPoolAfterSeconds;
+    private float returnToPoolAfterSeconds;
+    [SerializeField]
+    private LayerMask targetLayer;
+    [SerializeField]
+    private int damage = 1;
 
-    private Rigidbody2D _rb2D;
-    private Action<GameObject> _returnToPoolAction;
+    private Rigidbody2D rb2D;
+    private Action<GameObject> returnToPoolAction;
 
     private void Awake()
     {
-        _rb2D = GetComponent<Rigidbody2D>();
+        rb2D = GetComponent<Rigidbody2D>();
     }
 
     private void OnEnable()
@@ -25,9 +29,27 @@ public class Projectile : MonoBehaviour
         Launch();
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+
+        if ((targetLayer.value & (1 << collision.transform.gameObject.layer)) > 0)
+        {
+            
+            // get health component
+            iTakeDamage target = collision.gameObject.GetComponent<iTakeDamage>();
+
+            // damage target
+            target.TakeDamage(damage);
+
+            // disable/return projectile to pool
+            ReturnToPool();
+        }
+    }
+
     public void Init(Action<GameObject> returnToPoolAction)
     {
-        _returnToPoolAction = returnToPoolAction;
+        this.returnToPoolAction = returnToPoolAction;
     }
 
     IEnumerator ReturnAfterDelay(float seconds)
@@ -39,12 +61,12 @@ public class Projectile : MonoBehaviour
     private void ReturnToPool()
     {
         // stop projectile from moving
-        _rb2D.velocity = Vector2.zero;
+        rb2D.velocity = Vector2.zero;
 
         // if there is a pool, return to it
-        if(_returnToPoolAction != null)
+        if(returnToPoolAction != null)
         {
-            _returnToPoolAction(this.gameObject);
+            returnToPoolAction(this.gameObject);
         } 
         else
         {
@@ -54,7 +76,7 @@ public class Projectile : MonoBehaviour
 
     private void Launch()
     {        
-        _rb2D.AddForce(transform.right * _force, ForceMode2D.Impulse);
-        StartCoroutine(ReturnAfterDelay(_returnToPoolAfterSeconds));
+        rb2D.AddForce(transform.right * force, ForceMode2D.Impulse);
+        StartCoroutine(ReturnAfterDelay(returnToPoolAfterSeconds));
     }
 }
