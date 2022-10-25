@@ -12,7 +12,7 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     private float returnToPoolAfterSeconds;
     [SerializeField]
-    private LayerMask enemyLayer;
+    private LayerMask targetLayer;
     [SerializeField]
     private int damage = 1;
 
@@ -32,14 +32,15 @@ public class Projectile : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         
-        if(LayerMask.LayerToName(collision.gameObject.layer) == "Enemy")
+
+        if ((targetLayer.value & (1 << collision.transform.gameObject.layer)) > 0)
         {
             
             // get health component
-            Health targetHealth = collision.gameObject.GetComponent<Health>();
+            iTakeDamage target = collision.gameObject.GetComponent<iTakeDamage>();
 
             // damage target
-            targetHealth.TakeDamage(damage);
+            target.TakeDamage(damage);
 
             // disable/return projectile to pool
             ReturnToPool();
