@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour, iPoolable
 
     public void Kill()
     {
-        Destroy(this.gameObject);    
+        ReturnToPool();  
     }
 
     public void SwitchToState(EnemyState enemyState)
