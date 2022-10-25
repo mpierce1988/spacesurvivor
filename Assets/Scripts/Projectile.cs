@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Projectile : MonoBehaviour, iProjectile
+public class Projectile : MonoBehaviour, iProjectile, iPoolable
 {
     [SerializeField]
     private float force;
@@ -48,7 +48,7 @@ public class Projectile : MonoBehaviour, iProjectile
         }
     }
 
-    public void Init(Action<GameObject> returnToPoolAction)
+    public void SetReturnToPoolAction(Action<GameObject> returnToPoolAction)
     {
         this.returnToPoolAction = returnToPoolAction;
     }
@@ -59,7 +59,7 @@ public class Projectile : MonoBehaviour, iProjectile
         ReturnToPool();
     }
 
-    private void ReturnToPool()
+    public void ReturnToPool()
     {
         // stop projectile from moving
         rb2D.velocity = Vector2.zero;

@@ -3,67 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
+[RequireComponent(typeof(GameObjectPool))]
 public class Weapon : MonoBehaviour
 {
 
     // Fields
     [SerializeField]
-    protected GameObject _projectilePrefab;
+    protected GameObject projectilePrefab;
     [SerializeField]
-    protected float _fireSpeed;
+    protected Transform projectileHierarchyParent;
+    [SerializeField]
+    protected float fireSpeed;
+
+    protected GameObjectPool projectilePool;
 
 
     [SerializeField]
-    protected Transform _spawnPoint;
+    protected Transform spawnPoint;
 
-    protected Coroutine _firingCoroutine;
-    protected bool _isFiring;
+    protected Coroutine firingCoroutine;
+    protected bool isFiring;    
 
-    protected ObjectPool<GameObject> _pool;
+    public GameObject ProjectilePrefab { get => projectilePrefab; set { projectilePrefab = value; } }
+    public float FireSpeed { get => fireSpeed; set { fireSpeed = value; } }
+    public bool IsFiring { get => isFiring; set { isFiring = value; } }
+    public Transform SpawnPoint { get => spawnPoint; set { spawnPoint = value; } }
 
-    public GameObject ProjectilePrefab { get => _projectilePrefab; set { _projectilePrefab = value; } }
-    public float FireSpeed { get => _fireSpeed; set { _fireSpeed = value; } }
-    public bool IsFiring { get => _isFiring; set { _isFiring = value; } }
-    public Transform SpawnPoint { get => _spawnPoint; set { _spawnPoint = value; } }
-
-    private void Start()
+    private void Awake()
     {
-        // create pool of projectiles
-        _pool = new ObjectPool<GameObject>(
-            () =>
-            {
-                // instantiate prefab
-                GameObject prefab = Instantiate(_projectilePrefab);
-                // assign return to pool function to projectile class
-                prefab.GetComponent<Projectile>().Init(ReturnToPool);
-                // return gameobject to pool
-                return prefab;
-            },
-            (gameObject) =>
-            {
-                gameObject.transform.position = _spawnPoint.position;
-                gameObject.transform.rotation = _spawnPoint.rotation;
-                gameObject.SetActive(true);
-            },
-            (gameObject) =>
-            {
-                gameObject.SetActive(false);
-            },
-            (gameObject) =>
-            {
-                Destroy(gameObject.gameObject);
-            }, false, 20, 80);
+        projectilePool = GetComponent<GameObjectPool>();
     }
 
     public void StartFiring() {
-        _isFiring = true;
-        if (_firingCoroutine == null)
+        isFiring = true;
+        if (firingCoroutine == null)
         {
-            _firingCoroutine = StartCoroutine(ContinuousFire());
+            firingCoroutine = StartCoroutine(ContinuousFire());
         }
     }
     public void StopFiring() {
-        _isFiring = false;
+        isFiring = false;
     }
 
     IEnumerator ContinuousFire()
@@ -76,19 +55,16 @@ public class Weapon : MonoBehaviour
             yield return new WaitForSeconds(FireSpeed);
         }
 
-        _firingCoroutine = null;
-    }
-
-    private void ReturnToPool(GameObject item)
-    {
-        _pool.Release(item);
+        firingCoroutine = null;
     }
 
     private void FireFromSpawnPoint(Transform spawnPoint)
     {
-        GameObject projGameObject = _pool.Get();
-        iProjectile proj = projGameObject.GetComponent<iProjectile>();
+        GameObject projGameObject = projectilePool.GetItem();
+        projGameObject.transform.position = spawnPoint.position;
+        projGameObject.transform.rotation = spawnPoint.rotation;
 
+        iProjectile proj = projGameObject.GetComponent<iProjectile>();
         proj.Launch(spawnPoint.transform.right);
     }
 }

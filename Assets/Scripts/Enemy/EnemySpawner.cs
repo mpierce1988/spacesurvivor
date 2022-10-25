@@ -34,7 +34,7 @@ public class EnemySpawner : MonoBehaviour
     {
         while (_isSpawning)
         {
-            List<GameObject> enemiesToSpawn = GetEnemiesToSpawn();
+            List<EnemyUnit> enemiesToSpawn = GetEnemiesToSpawn();
 
             float spawnInterval = GetSpawnInterval(enemiesToSpawn.Count);            
             
@@ -42,8 +42,10 @@ public class EnemySpawner : MonoBehaviour
             // instantiate/enable enemies
             while (enemiesToSpawn.Count > 0)
             {
-                enemiesToSpawn[0].transform.position = GetRandomPositionAroundPlayer();
-                enemiesToSpawn[0].SetActive(true);
+                GameObject nextUnit = enemiesToSpawn[0].EnemyPrefabPool.GetItem();
+                
+                nextUnit.transform.position = GetRandomPositionAroundPlayer();
+                nextUnit.SetActive(true);
                 enemiesToSpawn.RemoveAt(0);
                 yield return new WaitForSeconds(spawnInterval);
             }
@@ -69,7 +71,7 @@ public class EnemySpawner : MonoBehaviour
         return spawnInterval;
     }
 
-    List<GameObject> GetEnemiesToSpawn()
+    List<EnemyUnit> GetEnemiesToSpawn()
     {
         // create a random list of enemies for current budget
         int remainingBudget = _startingBudget;
@@ -78,14 +80,15 @@ public class EnemySpawner : MonoBehaviour
             remainingBudget *= (int)((_currentWave - 1) * _budgetIncreaseFactor);
         }
 
-        List<GameObject> enemiesToSpawn = new List<GameObject>();
+        List<EnemyUnit> enemiesToSpawn = new List<EnemyUnit>();
 
         while (remainingBudget > 0)
         {
             int randomIndex = Random.Range(0, _enemyUnits.Count);
             if (_enemyUnits[randomIndex].Cost <= remainingBudget)
             {
-                enemiesToSpawn.Add(InstantiateAndDisable(_enemyUnits[randomIndex].EnemyPrefab));
+                
+                enemiesToSpawn.Add(_enemyUnits[randomIndex]);
                 remainingBudget -= _enemyUnits[randomIndex].Cost;
             }
             else if (remainingBudget <= 0)
@@ -102,18 +105,11 @@ public class EnemySpawner : MonoBehaviour
         Vector3 randomDirection = Random.insideUnitCircle.normalized;
         return _player.transform.position + (randomDirection * _distanceFromPlayer);
     }
-
-    GameObject InstantiateAndDisable(GameObject gameObject)
-    {
-        GameObject value = Instantiate(gameObject);
-        value.SetActive(false);
-        return value;
-    }
 }
 
 [System.Serializable]
 public struct EnemyUnit
 {
-    public GameObject EnemyPrefab;
+    public GameObjectPool EnemyPrefabPool;
     public int Cost;
 }

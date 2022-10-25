@@ -201,12 +201,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 754d4d91b7a217a4ab0a02bd53d02f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 2
+  force: 6
   returnToPoolAfterSeconds: 5
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
   damage: 1
+  launchOnEnable: 0
 --- !u!1 &962580976695201974
 GameObject:
   m_ObjectHideFlags: 0
