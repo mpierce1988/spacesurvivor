@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour, iProjectile
 {
     [SerializeField]
     private float force;
@@ -15,6 +15,8 @@ public class Projectile : MonoBehaviour
     private LayerMask targetLayer;
     [SerializeField]
     private int damage = 1;
+    [SerializeField]
+    private bool launchOnEnable = false;
 
     private Rigidbody2D rb2D;
     private Action<GameObject> returnToPoolAction;
@@ -26,12 +28,11 @@ public class Projectile : MonoBehaviour
 
     private void OnEnable()
     {
-        Launch();
+        if(launchOnEnable) Launch();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
-    {
-        
+    {       
 
         if ((targetLayer.value & (1 << collision.transform.gameObject.layer)) > 0)
         {
@@ -74,9 +75,16 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void Launch()
-    {        
-        rb2D.AddForce(transform.right * force, ForceMode2D.Impulse);
+    public void Launch()
+    {
+        Launch(transform.right);
+    }
+
+    public void Launch(Vector3 direction)
+    {
+        rb2D.AddForce(direction * force, ForceMode2D.Impulse);
         StartCoroutine(ReturnAfterDelay(returnToPoolAfterSeconds));
     }
+
+
 }

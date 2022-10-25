@@ -86,6 +86,9 @@ public class Weapon : MonoBehaviour
 
     private void FireFromSpawnPoint(Transform spawnPoint)
     {
-        GameObject projectile = _pool.Get();        
+        GameObject projGameObject = _pool.Get();
+        iProjectile proj = projGameObject.GetComponent<iProjectile>();
+
+        proj.Launch(spawnPoint.transform.right);
     }
 }
