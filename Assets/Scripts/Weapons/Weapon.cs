@@ -8,23 +8,25 @@ public class Weapon : MonoBehaviour
 
     // Fields
     [SerializeField]
-    protected GameObject _projectilePrefab;
+    protected GameObject projectilePrefab;
     [SerializeField]
-    protected float _fireSpeed;
+    protected Transform projectileHierarchyParent;
+    [SerializeField]
+    protected float fireSpeed;
 
 
     [SerializeField]
-    protected Transform _spawnPoint;
+    protected Transform spawnPoint;
 
-    protected Coroutine _firingCoroutine;
-    protected bool _isFiring;
+    protected Coroutine firingCoroutine;
+    protected bool isFiring;
 
     protected ObjectPool<GameObject> _pool;
 
-    public GameObject ProjectilePrefab { get => _projectilePrefab; set { _projectilePrefab = value; } }
-    public float FireSpeed { get => _fireSpeed; set { _fireSpeed = value; } }
-    public bool IsFiring { get => _isFiring; set { _isFiring = value; } }
-    public Transform SpawnPoint { get => _spawnPoint; set { _spawnPoint = value; } }
+    public GameObject ProjectilePrefab { get => projectilePrefab; set { projectilePrefab = value; } }
+    public float FireSpeed { get => fireSpeed; set { fireSpeed = value; } }
+    public bool IsFiring { get => isFiring; set { isFiring = value; } }
+    public Transform SpawnPoint { get => spawnPoint; set { spawnPoint = value; } }
 
     private void Start()
     {
@@ -33,20 +35,24 @@ public class Weapon : MonoBehaviour
             () =>
             {
                 // instantiate prefab
-                GameObject prefab = Instantiate(_projectilePrefab);
+                GameObject prefab = Instantiate(projectilePrefab);
                 // assign return to pool function to projectile class
-                prefab.GetComponent<Projectile>().Init(ReturnToPool);
+                prefab.GetComponent<iPoolable>().SetReturnToPoolAction(ReturnToPool);
+                // set parent transform
+                prefab.transform.parent = projectileHierarchyParent;
                 // return gameobject to pool
                 return prefab;
             },
             (gameObject) =>
             {
-                gameObject.transform.position = _spawnPoint.position;
-                gameObject.transform.rotation = _spawnPoint.rotation;
+                gameObject.transform.position = spawnPoint.position;
+                gameObject.transform.rotation = spawnPoint.rotation;
                 gameObject.SetActive(true);
             },
             (gameObject) =>
             {
+                gameObject.transform.position = Vector3.zero;
+                gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
                 gameObject.SetActive(false);
             },
             (gameObject) =>
@@ -56,14 +62,14 @@ public class Weapon : MonoBehaviour
     }
 
     public void StartFiring() {
-        _isFiring = true;
-        if (_firingCoroutine == null)
+        isFiring = true;
+        if (firingCoroutine == null)
         {
-            _firingCoroutine = StartCoroutine(ContinuousFire());
+            firingCoroutine = StartCoroutine(ContinuousFire());
         }
     }
     public void StopFiring() {
-        _isFiring = false;
+        isFiring = false;
     }
 
     IEnumerator ContinuousFire()
@@ -76,7 +82,7 @@ public class Weapon : MonoBehaviour
             yield return new WaitForSeconds(FireSpeed);
         }
 
-        _firingCoroutine = null;
+        firingCoroutine = null;
     }
 
     private void ReturnToPool(GameObject item)
