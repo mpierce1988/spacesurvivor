@@ -5,5 +5,6 @@ using UnityEngine;
 
 public interface iPoolable 
 {
+    public void ReturnToPool();
     public void SetReturnToPoolAction(Action<GameObject> returnToPoolAction);
 }
