@@ -14,6 +14,8 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     protected float fireSpeed;
 
+    public GameObjectPool projectilePool;
+
 
     [SerializeField]
     protected Transform spawnPoint;
@@ -21,7 +23,7 @@ public class Weapon : MonoBehaviour
     protected Coroutine firingCoroutine;
     protected bool isFiring;
 
-    protected ObjectPool<GameObject> _pool;
+    //protected ObjectPool<GameObject> _pool;
 
     public GameObject ProjectilePrefab { get => projectilePrefab; set { projectilePrefab = value; } }
     public float FireSpeed { get => fireSpeed; set { fireSpeed = value; } }
@@ -31,7 +33,7 @@ public class Weapon : MonoBehaviour
     private void Start()
     {
         // create pool of projectiles
-        _pool = new ObjectPool<GameObject>(
+        /*_pool = new ObjectPool<GameObject>(
             () =>
             {
                 // instantiate prefab
@@ -58,7 +60,7 @@ public class Weapon : MonoBehaviour
             (gameObject) =>
             {
                 Destroy(gameObject.gameObject);
-            }, false, 20, 80);
+            }, false, 20, 80);*/
     }
 
     public void StartFiring() {
@@ -85,16 +87,18 @@ public class Weapon : MonoBehaviour
         firingCoroutine = null;
     }
 
-    private void ReturnToPool(GameObject item)
+    /*private void ReturnToPool(GameObject item)
     {
         _pool.Release(item);
-    }
+    }*/
 
     private void FireFromSpawnPoint(Transform spawnPoint)
     {
-        GameObject projGameObject = _pool.Get();
-        iProjectile proj = projGameObject.GetComponent<iProjectile>();
+        GameObject projGameObject = projectilePool.GetItem();
+        projGameObject.transform.position = spawnPoint.position;
+        projGameObject.transform.rotation = spawnPoint.rotation;
 
+        iProjectile proj = projGameObject.GetComponent<iProjectile>();
         proj.Launch(spawnPoint.transform.right);
     }
 }

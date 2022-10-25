@@ -370,6 +370,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3744558497939206578}
   - component: {fileID: 5245326290931763622}
+  - component: {fileID: 1608161009504439781}
   m_Layer: 6
   m_Name: Weapon
   m_TagString: Untagged
@@ -408,6 +409,22 @@ MonoBehaviour:
   projectileHierarchyParent: {fileID: 8081420614948904940}
   fireSpeed: 0
   spawnPoint: {fileID: 6779277987451531818}
+--- !u!114 &1608161009504439781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5965237120852816725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af7bdbc612239e64c99495f467c9ecf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iPoolablePrefab: {fileID: 0}
+  parentTransform: {fileID: 8081420614948904940}
+  collectionCheck: 0
+  defaultCapacity: 20
 --- !u!1 &6936385332388509320
 GameObject:
   m_ObjectHideFlags: 0

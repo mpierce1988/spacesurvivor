@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, iPoolable
 {
     private EnemyState _currentState;
     public Rigidbody2D Rigidbody2D;
@@ -15,6 +16,7 @@ public class Enemy : MonoBehaviour
 
     private float _tickInterval = 0;
     private Coroutine _tickCoroutine;
+    private Action<GameObject> returnToPoolAction;
 
     private void Start()
     {
@@ -56,6 +58,16 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(TickSpeedInSeconds);
             _currentState.Tick(this);
         }
+    }
+
+    public void ReturnToPool()
+    {
+        returnToPoolAction(this.gameObject);
+    }
+
+    public void SetReturnToPoolAction(Action<GameObject> returnToPoolAction)
+    {
+        this.returnToPoolAction = returnToPoolAction;
     }
 }
 

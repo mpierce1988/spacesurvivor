@@ -59,7 +59,7 @@ public class Projectile : MonoBehaviour, iProjectile, iPoolable
         ReturnToPool();
     }
 
-    private void ReturnToPool()
+    public void ReturnToPool()
     {
         // stop projectile from moving
         rb2D.velocity = Vector2.zero;
