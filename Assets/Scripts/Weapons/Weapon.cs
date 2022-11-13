@@ -8,13 +8,11 @@ public class Weapon : MonoBehaviour
 {
 
     // Fields
-    [SerializeField]
-    protected GameObject projectilePrefab;
-    [SerializeField]
-    protected Transform projectileHierarchyParent;
+    
     [SerializeField]
     protected float fireSpeed;
 
+    [SerializeField]
     protected GameObjectPool projectilePool;
 
 
@@ -24,15 +22,11 @@ public class Weapon : MonoBehaviour
     protected Coroutine firingCoroutine;
     protected bool isFiring;    
 
-    public GameObject ProjectilePrefab { get => projectilePrefab; set { projectilePrefab = value; } }
+    
     public float FireSpeed { get => fireSpeed; set { fireSpeed = value; } }
     public bool IsFiring { get => isFiring; set { isFiring = value; } }
     public Transform SpawnPoint { get => spawnPoint; set { spawnPoint = value; } }
 
-    private void Awake()
-    {
-        projectilePool = GetComponent<GameObjectPool>();
-    }
 
     public void StartFiring() {
         isFiring = true;
