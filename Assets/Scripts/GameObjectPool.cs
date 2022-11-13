@@ -17,7 +17,7 @@ public class GameObjectPool : MonoBehaviour
     private ObjectPool<GameObject> pool;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Validate poolablePrefab implements iPoolable
         if(iPoolablePrefab.GetComponent<iPoolable>() == null)
